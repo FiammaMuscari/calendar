@@ -21,7 +21,7 @@ export const LoginPage = () => {
       </form>
       <Link to="/auth/register">
             Crear una cuenta
-        </Link>
+      </Link>
     </AuthLayout>
   );
 };
