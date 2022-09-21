@@ -1,51 +1,83 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useFormV } from "../../hooks/useFormV";
+import { InputForm } from "../components/InputForm";
+import { registerFormFields } from "../formFields";
+import { registerValidations } from "../formValidations";
+
 import { AuthLayout } from "../layout/AuthLayout";
 
 export const RegisterPage = () => {
-    return (
-           <AuthLayout title={'Register'}>
-                    <form className="mb-3 mt-3"> 
-                        <div className="form-group mb-2">
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Nombre"
-                            />
-                        </div>
-                        <div className="form-group mb-2">
-                            <input
-                                type="email"
-                                className="form-control"
-                                placeholder="Correo"
-                            />
-                        </div>
-                        <div className="form-group mb-2">
-                            <input
-                                type="password"
-                                className="form-control"
-                                placeholder="Contraseña" 
-                            />
-                        </div>
+  const [isSubmit, setIsSubmit] = useState(false);
 
-                        <div className="form-group mb-2">
-                            <input
-                                type="password"
-                                className="form-control"
-                                placeholder="Repita la contraseña" 
-                            />
-                        </div>
+  const {
+    username,
+    email,
+    password,
+    password2,
+    usernameValid,
+    emailValid,
+    passwordValid,
+    password2Valid,
+    formState,
+    isFormValid,
+    onInputChange,
+  } = useFormV(registerFormFields, registerValidations);
 
-                        <div className="d-grid gap-2">
-                            <input 
-                                type="submit" 
-                                className="btn btnSubmit" 
-                                value="Crear cuenta" />
-                        </div>
-                        
-                    </form>  
-                    <Link to="/auth/login">
-            Ya tengo una cuenta.
-        </Link>
-    </AuthLayout>                       
-    )
-}
+  const handleOnSumbit = (event) => {
+    event.preventDefault();
+    setIsSubmit(true);
+    if (!isFormValid) return;
+
+    console.log(formState);
+    
+  };
+
+  return (
+    <AuthLayout title={"Register"}>
+      <form className="mb-3 mt-3" onSubmit={handleOnSumbit}>
+        <InputForm
+          name="username"
+          value={username}
+          type="text"
+          onInputChange={onInputChange}
+          errorMessage={usernameValid}
+          isSubmit={isSubmit}
+          placeHolder="Nombre"
+        />
+        <InputForm
+          name="email"
+          value={email}
+          type="email"
+          onInputChange={onInputChange}
+          errorMessage={emailValid}
+          isSubmit={isSubmit}
+          placeHolder="Correo"
+        />
+        <InputForm
+          name="password"
+          value={password}
+          type="password"
+          onInputChange={onInputChange}
+          errorMessage={passwordValid}
+          isSubmit={isSubmit}
+          placeHolder="Contraseña"
+        />
+        <InputForm
+          name="password2"
+          value={password2}
+          type="password"
+          onInputChange={onInputChange}
+          errorMessage={password2Valid}
+          isSubmit={isSubmit}
+          placeHolder="Repita su Contraseña"
+        />
+
+        <div className="d-grid gap-2">
+          <input type="submit" className="btn btnSubmit" value="Crear cuenta" />
+        </div>
+      </form>
+      <Link to="/auth/login">Ya tengo una cuenta.</Link>
+    </AuthLayout>
+  );
+};
